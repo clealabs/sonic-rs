@@ -1,5 +1,7 @@
 use std::ops::{BitAnd, BitOr, BitOrAssign};
 
+use crate::{Mask, Simd};
+
 #[derive(Debug)]
 pub struct Simd128i([i8; 16]);
 
