@@ -1573,10 +1573,17 @@ impl<'a> DocumentVisitor<'a> {
         if self.nodes().len() == self.nodes().capacity() {
             false
         } else {
-            self.nodes().push(ManuallyDrop::new(unsafe {
-                transmute::<MetaNode, Value>(node)
-            }));
-            true
+            #[cfg(not(target_arch = "wasm32"))]
+            {
+                self.nodes().push(ManuallyDrop::new(unsafe {
+                    transmute::<MetaNode, Value>(node)
+                }));
+                true
+            }
+            #[cfg(target_arch = "wasm32")]
+            {
+                panic!("Cannot transmute MetaNode and Value in wasm32 arch");
+            }
         }
     }
 }
